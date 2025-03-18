@@ -1,6 +1,5 @@
 package com.magaya.training.spring_tour_of_heroes;
 
-import java.nio.file.Watchable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -12,16 +11,17 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class HelloWorld {
+@Controller
+public class HeroController {
 	
 	private final JdbcTemplate jdbcTemplate;
+	private final HeroService heroService;
 	
 	@Autowired
-	public HelloWorld (JdbcTemplate jdbcTemplate) {
+	public HeroController (JdbcTemplate jdbcTemplate, HeroService heroService) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.heroService = heroService;
 	}
 
 	@ResponseBody
@@ -41,5 +41,12 @@ public class HelloWorld {
 		return tablesResult;
 //		return tablesResult.toString();
 //		return "Hello World " +jdbcTemplate.getDataSource();
+	}
+	
+	
+	@GetMapping("/hero")
+	@ResponseBody
+	public List<Hero> getHeroes(){
+		return heroService.getHeroes();
 	}
 }
