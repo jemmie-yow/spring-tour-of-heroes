@@ -58,7 +58,20 @@ public class HeroDAOImpl implements HeroDAO{
 
 	@Override
 	public Hero updateHero(Hero hero) {
-		return null;
+		String sql = "UPDATE heroes SET name = ?, user_visits = ? WHERE id = ?";
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbc.update((Connection con) -> {
+			PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, hero.getName());
+			ps.setInt(2, hero.getUserVisits());
+			ps.setInt(3, hero.getId());
+			return ps;
+		}, keyHolder);
+		Hero updatedHero = new Hero();
+		updatedHero.setId((int) keyHolder.getKeys().get("id"));
+		updatedHero.setName(keyHolder.getKeys().get("name").toString());
+		updatedHero.setUserVisits((int) keyHolder.getKeys().get("user_visits"));
+		return updatedHero;
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -63,5 +64,11 @@ public class HeroController {
 	@ResponseBody
 	public Hero insertHero(@RequestBody Hero hero) {
 		return heroService.insertHero(hero);
+	}
+	
+	@PutMapping("/hero")
+	@ResponseBody
+	public Hero updateHero(@RequestBody Hero hero) {
+		return heroService.updateHero(hero);
 	}
 }
