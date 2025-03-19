@@ -21,9 +21,12 @@ public class HeroDAOImpl implements HeroDAO{
 	}
 	
 	@Override
-	public List<Hero> getHeroes() {
-		String sql = "SELECT * FROM heroes";
-		List<Hero> heroes = jdbc.query(sql, new BeanPropertyRowMapper<Hero>(Hero.class));
+	public List<Hero> getHeroes(String keyword) {
+		String sql = "SELECT * FROM heroes WHERE LOWER(name) LIKE ?";
+		List<Hero> heroes = jdbc.query(
+				sql,
+				new BeanPropertyRowMapper<Hero>(Hero.class),
+				new Object[] { "%" + keyword + "%"});
 		return heroes;
 	}
 
@@ -76,7 +79,8 @@ public class HeroDAOImpl implements HeroDAO{
 
 	@Override
 	public void deleteHero(int id) {
-
+		String sql = "DELETE FROM heroes WHERE id = ?";
+		jdbc.update(sql, new Object[] {id});
 	}
-
+	
 }

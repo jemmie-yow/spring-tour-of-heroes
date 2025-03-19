@@ -14,8 +14,8 @@ public class HeroServiceImpl implements HeroService {
 	}
 	
 	@Override
-	public List<Hero> getHeroes() {
-		return heroDAO.getHeroes();
+	public List<Hero> getHeroes(String keyword) {
+		return heroDAO.getHeroes(keyword);
 	}
 	
 	@Override

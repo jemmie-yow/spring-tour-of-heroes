@@ -1,22 +1,22 @@
 package com.magaya.training.spring_tour_of_heroes;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequestMapping("/api/hero")
 public class HeroController {
 	
 	private final JdbcTemplate jdbcTemplate;
@@ -28,47 +28,38 @@ public class HeroController {
 		this.heroService = heroService;
 	}
 
+	
+	@GetMapping
 	@ResponseBody
-	@GetMapping("/hello")
-	public List<String> helloWorld() {
-		List<String> tablesResult =  jdbcTemplate.execute(
-				(Connection conn) -> {
-					List<String> tables = new ArrayList<>();
-					DatabaseMetaData metaData = conn.getMetaData();
-					ResultSet rs = metaData.getTables(null, null, null, new String[] {"TABLE"});
-					while (rs.next()) {
-						tables.add(rs.getString("TABLE_NAME"));
-					}
-					return tables;
-				}
-			);
-		return tablesResult;
-//		return tablesResult.toString();
-//		return "Hello World " +jdbcTemplate.getDataSource();
+	public List<Hero> getHeroes(@RequestParam(
+			name = "keyword",
+			defaultValue = "",
+			required = false) String keyword){
+		return heroService.getHeroes(keyword);
 	}
 	
-	
-	@GetMapping("/hero")
-	@ResponseBody
-	public List<Hero> getHeroes(){
-		return heroService.getHeroes();
-	}
-	
-	@GetMapping("hero/{id}")
+	@GetMapping("/{id}")
 	@ResponseBody
 	public Hero getHeroById(@PathVariable("id") int id) {
 		return heroService.getHero(id);
 	}
 	
-	@PostMapping("/hero")
+	@PostMapping
 	@ResponseBody
 	public Hero insertHero(@RequestBody Hero hero) {
 		return heroService.insertHero(hero);
 	}
 	
-	@PutMapping("/hero")
+	@PutMapping
 	@ResponseBody
 	public Hero updateHero(@RequestBody Hero hero) {
 		return heroService.updateHero(hero);
 	}
+	
+	@DeleteMapping("/{id}")
+	@ResponseBody
+	public void deleteHero(@PathVariable("id") int id) {
+		heroService.deleteHero(id);
+	}
+	
 }
