@@ -3,7 +3,7 @@ package com.magaya.training.spring_tour_of_heroes;
 public class Hero {
 	private int id;
 	private String name;
-	private int user_visits;
+	private int userVisits;
 
 	public int getId() {
 		return id;
@@ -17,11 +17,11 @@ public class Hero {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getUser_visits() {
-		return user_visits;
+	public int getUserVisits() {
+		return userVisits;
 	}
-	public void setUser_visits(int user_visits) {
-		this.user_visits = user_visits;
+	public void setUserVisits(int userVisits) {
+		this.userVisits = userVisits;
 	}
 	
 	

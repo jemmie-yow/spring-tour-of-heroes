@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -48,5 +49,11 @@ public class HeroController {
 	@ResponseBody
 	public List<Hero> getHeroes(){
 		return heroService.getHeroes();
+	}
+	
+	@GetMapping("hero/{id}")
+	@ResponseBody
+	public Hero getHeroById(@PathVariable("id") int id) {
+		return heroService.getHero(id);
 	}
 }

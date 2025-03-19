@@ -1,7 +1,9 @@
 package com.magaya.training.spring_tour_of_heroes;
 
+import java.sql.Types;
 import java.util.List;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,19 +19,15 @@ public class HeroDAOImpl implements HeroDAO{
 	@Override
 	public List<Hero> getHeroes() {
 		String sql = "SELECT * FROM heroes";
-		List<Hero> heroes = jdbc.query(sql, (rs, rowNum) -> {
-			Hero hero = new Hero();
-			hero.setId(rs.getInt("id"));
-			hero.setName(rs.getString("name"));
-			hero.setUser_visits(rs.getInt("user_visits"));
-			return hero;
-		});
+		List<Hero> heroes = jdbc.query(sql, new BeanPropertyRowMapper<Hero>(Hero.class));
 		return heroes;
 	}
 
 	@Override
 	public Hero getHero(int id) {
-		return null;
+		String sql = "SELECT * FROM heroes WHERE id = ?";
+		Hero hero = jdbc.queryForObject(sql, new BeanPropertyRowMapper<Hero>(Hero.class), new Object[]{id});
+		return hero;
 	}
 
 	@Override
