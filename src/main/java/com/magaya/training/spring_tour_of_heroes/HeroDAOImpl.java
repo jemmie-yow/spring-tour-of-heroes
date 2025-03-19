@@ -1,10 +1,14 @@
 package com.magaya.training.spring_tour_of_heroes;
 
-import java.sql.Types;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -32,8 +36,25 @@ public class HeroDAOImpl implements HeroDAO{
 
 	@Override
 	public Hero insertHero(Hero hero) {
-		return null;
+		try {
+			String sql = "INSERT INTO heroes (name) VALUES (?)";
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			jdbc.update((Connection con) -> {
+						PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+						ps.setString(1, hero.getName());
+						return ps;
+					}
+					, keyHolder);
+			Hero newHero = new Hero();
+			newHero.setId((int) keyHolder.getKeys().get("id"));
+			newHero.setName(keyHolder.getKeys().get("name").toString());
+			newHero.setUserVisits((int) keyHolder.getKeys().get("user_visits"));
+			return newHero;
+		} catch (Exception e) {
+			throw e;
+		} 	
 	}
+	
 
 	@Override
 	public Hero updateHero(Hero hero) {
